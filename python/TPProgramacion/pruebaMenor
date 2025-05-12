@@ -1,0 +1,43 @@
+archivo = open('registro_temperatura365d_smn.txt', 'r')
+
+def registro(archivo):
+    max_amplitud = 0
+    registro_max_amplitud = ""
+
+    for i in archivo:
+
+        if i.startswith("FECHA") or i.startswith("--------"):
+            continue
+
+        fecha = i[0:8]
+        max_str = i[9:14]
+        min_str = i[15:20]
+        base = i[21:54]
+
+
+        if max_str != '     '  and min_str != '     ':
+            try:
+                max = float(max_str)
+                min = float(min_str)
+
+                amplitud = abs(max-min)
+
+                if amplitud > max_amplitud:
+                    max_amplitud = amplitud
+                    registro_max_amplitud = f"{fecha} {max_str} {min_str} {base} {max_amplitud}"
+            except:
+                continue
+
+            
+            
+            
+    
+    return registro_max_amplitud
+
+
+   
+    
+
+print(registro(archivo))
+
+archivo.close()
