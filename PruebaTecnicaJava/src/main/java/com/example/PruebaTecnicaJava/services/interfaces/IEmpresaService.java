@@ -1,4 +1,4 @@
-package com.example.PruebaTecnicaJava.services;
+package com.example.PruebaTecnicaJava.services.interfaces;
 
 import com.example.PruebaTecnicaJava.models.Empresa;
 

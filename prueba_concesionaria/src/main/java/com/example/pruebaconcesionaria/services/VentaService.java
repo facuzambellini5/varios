@@ -117,7 +117,9 @@ public class VentaService implements IVentaService {
     if (ventaDTO.getIdVenta() == null) {
       throw new RuntimeException("ID necesaria para editar una venta.");
     }
+
     Venta venta = this.getVentaById(ventaDTO.getIdVenta());
+
     if (venta == null) {
       throw new RuntimeException("Venta no encontrada.");
     }

@@ -2,6 +2,7 @@ package com.example.PruebaTecnicaJava.services;
 
 import com.example.PruebaTecnicaJava.models.Empresa;
 import com.example.PruebaTecnicaJava.repositories.IEmpresaRepository;
+import com.example.PruebaTecnicaJava.services.interfaces.IEmpresaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class EmpresaService implements IEmpresaService {
       throw new RuntimeException("Se ha producido un error.", e);
     }
 
-    return "Empresa guardada correctamente.";
+    return "Empresa adherida correctamente.";
   }
 
   @Override
@@ -41,17 +42,28 @@ public class EmpresaService implements IEmpresaService {
       throw new RuntimeException("Debe ingresar un ID para especificar la empresa a editar.");
     }
 
-    Empresa empresa1 = this.getEmpresaById(empresa.getIdEmpresa());
-    if (empresa1 == null) {
-      throw new RuntimeException("No se ha encontrado la empresa a editar.");
+    Empresa empresaActualizada = this.getEmpresaById(empresa.getIdEmpresa());
+    if (empresaActualizada == null) {
+      throw new RuntimeException("No se ha encontrado la empresa con ID: "+empresa.getIdEmpresa());
     }
 
-    this.saveEmpresa(empresa);
-    return empresa;
+    empresaActualizada.setCuit(empresa.getCuit());
+    empresaActualizada.setFechaAdhesion(empresa.getFechaAdhesion());
+    empresaActualizada.setRazonSocial(empresa.getRazonSocial());
+
+    this.saveEmpresa(empresaActualizada);
+    return empresaActualizada;
   }
 
   @Override
   public String deleteEmpresa(Long idEmpresa) {
-    return "";
+
+    try{
+      empresaRepo.deleteById(idEmpresa);
+    } catch (RuntimeException e) {
+      throw new RuntimeException("Se ha producido un error.", e);
+    }
+
+    return "Empresa eliminada correctamente.";
   }
 }
