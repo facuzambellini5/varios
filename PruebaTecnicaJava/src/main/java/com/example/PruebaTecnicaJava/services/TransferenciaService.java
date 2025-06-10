@@ -9,6 +9,7 @@ import com.example.PruebaTecnicaJava.repositories.ITransferenciaRepository;
 import com.example.PruebaTecnicaJava.services.interfaces.ITransferenciaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -53,6 +54,7 @@ public class TransferenciaService implements ITransferenciaService {
   }
 
   @Override
+  @Transactional
   public Transferencia editTransferencia (Long idTransferencia, UpdateTransferenciaDTO updateTransferenciaDTO) {
 
     Transferencia transferencia = validacionService.validarTransferencia(idTransferencia);
@@ -61,23 +63,19 @@ public class TransferenciaService implements ITransferenciaService {
     transferencia.setImporte(updateTransferenciaDTO.getImporte());
     transferencia.setCuentaDebito(updateTransferenciaDTO.getCuentaDebito());
 
-    Empresa empresaAnterior = transferencia.getEmpresa();
-    Empresa empresaNueva = validacionService.validarEmpresa(updateTransferenciaDTO.getIdEmpresa());
+    if(!transferencia.getEmpresa().getIdEmpresa().equals(updateTransferenciaDTO.getIdEmpresa())){
 
-    if(empresaAnterior != empresaNueva){
+      Empresa empresaAnterior = transferencia.getEmpresa();
+      Empresa empresaNueva = validacionService.validarEmpresa(updateTransferenciaDTO.getIdEmpresa());
+
       transferencia.setEmpresa(empresaNueva);
       empresaNueva.getTransferencias().add(transferencia);
       empresaAnterior.getTransferencias().remove(transferencia);
-    }
-
-    try{
-      transferenciaRepo.save(transferencia);
-      empresaRepo.save(empresaNueva);
       empresaRepo.save(empresaAnterior);
-    } catch (RuntimeException e) {
-      throw new RuntimeException("Se produjo un error.",e);
+      empresaRepo.save(empresaNueva);
     }
 
+    transferenciaRepo.save(transferencia);
     return transferencia;
   }
 
