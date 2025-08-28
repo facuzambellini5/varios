@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 public class ValidacionService implements IValidacionService {
 
     @Autowired
-    IEmpresaRepository empresaRepo;
+    private IEmpresaRepository empresaRepo;
 
     @Autowired
-    ITransferenciaRepository transferenciaRepo;
+    private ITransferenciaRepository transferenciaRepo;
 
     @Override
     public Empresa validarEmpresa(Long idEmpresa) {

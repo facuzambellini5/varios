@@ -85,10 +85,10 @@ public class TransferenciaService implements ITransferenciaService {
     if (this.getTransferenciaById(idTransferencia) != null) {
       try {
         transferenciaRepo.deleteById(idTransferencia);
+        return "Transferencia eliminada correctamente.";
       } catch (RuntimeException e) {
         throw new RuntimeException("Se ha producido un error.", e);
       }
-      return "Transferencia eliminada correctamente.";
     } else {
       return "No se ha encontrado la transferencia con ID " + idTransferencia;
     }
